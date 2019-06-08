@@ -6,3 +6,4 @@ class Ponto_de_acesso:
 
 if __name__ == "__main__":
     @todo #testes unitarios
+    print("p")
