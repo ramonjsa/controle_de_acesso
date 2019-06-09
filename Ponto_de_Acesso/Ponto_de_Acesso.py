@@ -12,7 +12,8 @@ class Ponto_de_acesso:
 
     def solicita_passagem(self,id_pessoa,sentido):
         print("solicita acesso ao mestre para pessoa {} ao local".format(id_pessoa))
-        return True
+        return self.mestre.solicita_acesso(self.local,id_pessoa,sentido)
+
 
     def libera_passagem(self):
         print("libera passagem por 5s")
@@ -27,24 +28,21 @@ class Ponto_de_acesso:
 
     def registra_passgem(self,id_pessoa,sentido):
         print("informa ao mestre a passagem da pessoa {} no sentido {}".format(id_pessoa,sentido))
+        self.mestre.registra_passagem(self.local,sentido)
 
 def Main():
     mestre = Pyro4.Proxy("PYRONAME:mestre")
     print(mestre.consulta_pessoa("1"))
-    config={}
+
     with open("config.cfg") as arquivo_de_configuracao:
         config = json.load(arquivo_de_configuracao)
         print()
-        ip_mestre=config.get("mestre").get("host")
-        porta_mestre=config.get("mestre").get("port")
+
         id=config.get("ponto_de_acesso").get("id")
         local=config.get("ponto_de_acesso").get("local")
-    '''ip_mestre = input("digite o endereco ip do mestre")
-    porta_mestre= input ("digite a porta de acesso no mestre")
-    local=input("digite local")
-    id = "12345"'''
-    mestre=ip_mestre+':'+porta_mestre
-    ponto_de_acesso = Ponto_de_acesso(local=local,mestre=mestre,id=id)
+
+
+    ponto_de_acesso = Ponto_de_acesso(local,mestre,id)
     while (True):
         id_pessoa = input("identificador da pessoa")
         sentido = input("sentido :")
@@ -54,6 +52,8 @@ def Main():
                 ponto_de_acesso.registra_passgem(id_pessoa,sentido)
             else:
                 print("passagem canselada")
+        else :
+            print("acesso negado")
         sleep(1)
 if __name__ == "__main__":
 
