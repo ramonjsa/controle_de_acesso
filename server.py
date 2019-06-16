@@ -20,6 +20,8 @@ class mestre(object):
                             return True
                         else :
                             return False
+                    elif sentido == "sair":
+                        return True
             else:
                 return False
 
@@ -32,7 +34,7 @@ class mestre(object):
                 print(locais[local])
             elif sentido == "sair":
                 locais[local]["atual"] = locais[local]["atual"] - 1
-                print(locais[local])
+                print(local+" "+locais[local])
         return False
 
 
